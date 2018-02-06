@@ -1,0 +1,92 @@
+---
+- name: install libjemalloc1
+  package:
+    name: libjemalloc1
+  when: ansible_os_family == 'Debian'
+
+- name: set map counts param to 1048575
+  sysctl:
+    name: vm.max_map_count
+    value: 1048575
+
+- name: disable swap
+  command: swapoff --all
+  changed_when: no
+
+- name: make sure user for Cassandra exists
+  user:
+    name: "{{ cassandra_user }}"
+
+- name: unarchive Cassandra
+  unarchive:
+    remote_src: yes
+    dest: "{{ cassandra_install_parent_dir }}"
+    src: "{{ cassandra_url }}"
+    creates: "{{ cassandra_install_dir }}"
+    owner: "{{ cassandra_user }}"
+    group: "{{ cassandra_group }}"
+  notify: restart cassandra
+
+- name: create symlink to the current release
+  file:
+    src: "{{ cassandra_install_dir }}"
+    path: "{{ cassandra_link_dir }}"
+    state: link
+    owner: "{{ cassandra_user }}"
+    group: "{{ cassandra_group }}"
+  notify: restart cassandra
+
+- name: Add bin dir to $PATH.
+  copy:
+    dest: /etc/profile.d/cassandra-path.sh
+    content: 'PATH=$PATH:{{ cassandra_install_dir }}/bin'
+
+- name: create required directories
+  file:
+    state: directory
+    owner: "{{ cassandra_user }}"
+    group: "{{ cassandra_group }}"
+    path: "{{ cassandra_install_dir }}/{{ item }}"
+  with_items:
+    - logs
+    - data/data
+    - data/commitlog
+    - data/saved_caches
+    - data/hints
+
+- name: create configuration files
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ cassandra_install_dir }}/conf/{{ item }}"
+    owner: "{{ cassandra_user }}"
+    group: "{{ cassandra_group }}"
+  notify: restart cassandra
+  with_items:
+    - cassandra.yaml
+    - cassandra-env.sh
+
+- name: download jmx exporter java agent
+  get_url:
+    url: https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.2.0/jmx_prometheus_javaagent-0.2.0.jar
+    dest: "{{ cassandra_install_dir }}/lib/jmx_prometheus_javaagent-0.2.0.jar"
+
+- name: create jmx exporter configuration file
+  template:
+    src: "jmx_exporter_config.yml.j2"
+    dest: "{{ cassandra_install_dir }}/conf/jmx_exporter_config.yml"
+    owner: "{{ cassandra_user }}"
+    group: "{{ cassandra_group }}"
+
+- name: create systemd script
+  template:
+    src: cassandra.service.j2
+    dest: /etc/systemd/system/cassandra.service
+  notify: restart cassandra
+
+- meta: flush_handlers
+
+- name: make sure Cassandra is started
+  service:
+    name: cassandra
+    state: started
+    enabled: yes

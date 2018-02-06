@@ -1,0 +1,14 @@
+sudo: required
+language: ruby
+services:
+- docker
+install:
+- bundle install
+script:
+- kitchen test
+notifications:
+  slack:
+    on_success: change
+    on_failure: always
+    rooms:
+      secure: gJvAgbJZLp26OhGPI6jY/8FsHu2oKundj0Ya7lAL3V+CXEwhmaMvB5HaSdXPFn/ivgYgIkQXPT0q3wEKsEPNlmRaUi7YqN8xZylqL6m34JGLemrBPIUFIaA5S/zjPXY03gGyYqTfadxjgheg+FeKyo016eGwIjzQR8MEyIJPTPk2Y1WYuIwOWrC+/RKH3RJEbU1c3XhnON0GjRLalAKZ86gWDeYqutYaeVxhZS/ubU1xugfqb1halsv21yLD1dPB6TKdEJDcfxnNKOwZWk8Jg08FHuFxitTnxoTjUkseC0zCJo7bVTS71vKAUrjRHH4HlC72dIQdGIkue+5qOZ/kGf31bIY8QQGk6jpIiOE4RzTyfl1t8THow11WzeIhiyWc3hCAD6dfQl7uX4ejEI4Kq2S02l/HsZvyQ0eiG4gmd2VJXUBIiW04Qa1KC516pvwPl88movPBxW7HXetnJXRiTrpxuxYkZLg4CtNex94z39Mbm7ysrNWLakSksHAfBJ/+v+DwodrNyHVR564lFxIa6agX9Y18m9+cPBp72zSifuPeSsgXHeC1yAboPhM+ewPCm8I/ytHvsqIeD4MPKjSd0EAW3Q75QVLLfUbZtKTDYQjjqe/c4epYtJd6yoqjcBIxwcmNXWt1DqAexjnOhvnKwtEz7S1J5hQVy1onid1LvyE=

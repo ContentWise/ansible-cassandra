@@ -1,0 +1,5 @@
+---
+- src: https://github.com/ContentWise/ansible-java
+  version: master
+  name: contentwise.java
+  scm: git

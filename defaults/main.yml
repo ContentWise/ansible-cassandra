@@ -1,0 +1,21 @@
+---
+cassandra_install_parent_dir: "/opt"
+cassandra_version: "3.11.1"
+cassandra_user: cassandra
+cassandra_group: cassandra
+
+
+
+
+
+
+
+
+
+
+
+# cassandra_cluster_name: Test Cluster # ID required by Cassandra configuration to identify a Cluster
+# cassandra_seeds: localhost # comma-separated list of seeds addresses
+# cassandra_native_transport_port: 9042
+# cassandra_rpc_port: 9160
+# cassandra_sleep_between_restarts: 0
