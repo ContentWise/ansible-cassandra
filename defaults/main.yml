@@ -3,19 +3,29 @@ cassandra_install_parent_dir: "/opt"
 cassandra_version: "3.11.1"
 cassandra_user: cassandra
 cassandra_group: cassandra
+cassandra_cluster_name: Test Cluster
+cassandra_listen_address: localhost
+cassandra_native_transport_port: 9042
+cassandra_start_rpc: true
+cassandra_rpc_address: localhost
+cassandra_rpc_port: 9160
+cassandra_seeds:
+  - localhost
 
-
-
-
-
-
-
-
-
-
-
-# cassandra_cluster_name: Test Cluster # ID required by Cassandra configuration to identify a Cluster
-# cassandra_seeds: localhost # comma-separated list of seeds addresses
-# cassandra_native_transport_port: 9042
-# cassandra_rpc_port: 9160
-# cassandra_sleep_between_restarts: 0
+cassandra_install_jmx_prometheus_javaagent: true # https://github.com/prometheus/jmx_exporter
+cassandra_jmx_prometheus_javaagent_version: '0.2.0'
+cassandra_jmx_prometheus_javaagent_port: 7070
+cassandra_jmx_prometheus_javaagent_config: # https://github.com/prometheus/jmx_exporter/blob/master/example_configs/cassandra.yml
+  lowercaseOutputLabelNames: true
+  lowercaseOutputName: true
+  rules:
+    - pattern: org.apache.cassandra.metrics<type=(Connection|Streaming), scope=(\S*), name=(\S*)><>(Count|Value)
+      name: cassandra_$1_$3
+      labels:
+        address: "$2"
+    - pattern: org.apache.cassandra.metrics<type=(\S*)(?:, ((?!scope)\S*)=(\S*))?(?:, scope=(\S*))?,
+        name=(\S*)><>(Count|Value)
+      name: cassandra_$1_$5
+      labels:
+        "$1": "$4"
+        "$2": "$3"

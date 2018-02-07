@@ -294,5 +294,7 @@ JVM_OPTS="$JVM_OPTS $MX4J_ADDRESS"
 JVM_OPTS="$JVM_OPTS $MX4J_PORT"
 JVM_OPTS="$JVM_OPTS $JVM_EXTRA_OPTS"
 
+{% if cassandra_install_jmx_prometheus_javaagent | bool %}
 # JMX Exporter for exposing metrics in prometheus format
-JVM_OPTS="$JVM_OPTS -javaagent:{{ cassandra_install_dir }}/lib/jmx_prometheus_javaagent-0.2.0.jar=7070:{{ cassandra_install_dir }}/conf/jmx_exporter_config.yml"
+JVM_OPTS="$JVM_OPTS -javaagent:{{ cassandra_install_dir }}/lib/jmx_prometheus_javaagent-{{ cassandra_jmx_prometheus_javaagent_version }}.jar={{ cassandra_jmx_prometheus_javaagent_port }}:{{ cassandra_install_dir }}/conf/jmx_prometheus_javaagent_config.yml"
+{% endif %}

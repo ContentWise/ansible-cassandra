@@ -65,17 +65,18 @@
     - cassandra.yaml
     - cassandra-env.sh
 
-- name: download jmx exporter java agent
-  get_url:
-    url: https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.2.0/jmx_prometheus_javaagent-0.2.0.jar
-    dest: "{{ cassandra_install_dir }}/lib/jmx_prometheus_javaagent-0.2.0.jar"
-
-- name: create jmx exporter configuration file
-  template:
-    src: "jmx_exporter_config.yml.j2"
-    dest: "{{ cassandra_install_dir }}/conf/jmx_exporter_config.yml"
-    owner: "{{ cassandra_user }}"
-    group: "{{ cassandra_group }}"
+- block:
+    - name: download jmx prometheus java agent
+      get_url:
+        url: https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/{{ cassandra_jmx_prometheus_javaagent_version }}/jmx_prometheus_javaagent-{{ cassandra_jmx_prometheus_javaagent_version }}.jar
+        dest: "{{ cassandra_install_dir }}/lib/jmx_prometheus_javaagent-{{ cassandra_jmx_prometheus_javaagent_version }}.jar"
+    - name: create jmx prometheus java agent configuration file
+      copy:
+        content: "{{ cassandra_jmx_prometheus_javaagent_config | to_nice_yaml }}"
+        dest: "{{ cassandra_install_dir }}/conf/jmx_prometheus_javaagent_config.yml"
+        owner: "{{ cassandra_user }}"
+        group: "{{ cassandra_group }}"
+  when: cassandra_install_jmx_prometheus_javaagent | bool
 
 - name: create systemd script
   template:
