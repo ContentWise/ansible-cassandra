@@ -122,7 +122,7 @@ case "$jvm" in
 esac
 
 #GC log path has to be defined here because it needs to access CASSANDRA_HOME
-JVM_OPTS="$JVM_OPTS -Xloggc:${CASSANDRA_HOME}/logs/gc.log"
+JVM_OPTS="$JVM_OPTS -Xloggc:{{ cassandra_log_dir }}/gc.log"
 
 # Here we create the arguments that will get passed to the jvm when
 # starting cassandra.
@@ -298,3 +298,5 @@ JVM_OPTS="$JVM_OPTS $JVM_EXTRA_OPTS"
 # JMX Exporter for exposing metrics in prometheus format
 JVM_OPTS="$JVM_OPTS -javaagent:{{ cassandra_install_dir }}/lib/jmx_prometheus_javaagent-{{ cassandra_jmx_prometheus_javaagent_version }}.jar={{ cassandra_jmx_prometheus_javaagent_port }}:{{ cassandra_install_dir }}/conf/jmx_prometheus_javaagent_config.yml"
 {% endif %}
+
+JVM_OPTS="$JVM_OPTS -Dcassandra.logdir={{ cassandra_log_dir }}"

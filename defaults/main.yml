@@ -12,6 +12,8 @@ cassandra_rpc_port: 9160
 cassandra_seeds:
   - localhost
 cassandra_endpoint_snitch: SimpleSnitch
+cassandra_data_dir: /var/lib/cassandra
+cassandra_log_dir: /var/log/cassandra
 
 cassandra_install_jmx_prometheus_javaagent: true # https://github.com/prometheus/jmx_exporter
 cassandra_jmx_prometheus_javaagent_version: '0.2.0'

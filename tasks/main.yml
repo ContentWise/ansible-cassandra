@@ -41,18 +41,26 @@
     dest: /etc/profile.d/cassandra-path.sh
     content: 'PATH=$PATH:{{ cassandra_install_dir }}/bin'
 
-- name: create required directories
+- name: create required data directories
   file:
     state: directory
     owner: "{{ cassandra_user }}"
     group: "{{ cassandra_group }}"
-    path: "{{ cassandra_install_dir }}/{{ item }}"
+    path: "{{ cassandra_data_dir }}/{{ item }}"
   with_items:
-    - logs
-    - data/data
-    - data/commitlog
-    - data/saved_caches
-    - data/hints
+    - data
+    - commitlog
+    - saved_caches
+    - hints
+  loop_control:
+    label: "{{ cassandra_data_dir }}/{{ item }}"
+
+- name: create required log directory
+  file:
+    state: directory
+    owner: "{{ cassandra_user }}"
+    group: "{{ cassandra_group }}"
+    path: "{{ cassandra_log_dir }}"
 
 - name: create configuration files
   template:
