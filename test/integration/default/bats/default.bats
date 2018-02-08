@@ -6,6 +6,6 @@
 }
 
 @test "Validate status code for jmx metrics exporter" {
-  run curl -s -o /dev/null -w "%{http_code}" localhost:7070/metrics
+  run curl -s -o /dev/null -w "%{http_code}" localhost:9404/metrics
   [[ $output = "200" ]]
 }

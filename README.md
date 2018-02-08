@@ -3,6 +3,8 @@
 
 An Ansible Role that installs [Cassandra](http://cassandra.apache.org) on Linux.
 
+The role will also install the [JMX Prometheus Java Agent](https://github.com/prometheus/jmx_exporter) to export metrics in Prometheus format.
+
 ## Role Variables
 
 Available variables with their default values are defined in [defaults/main.yml](defaults/main.yml).

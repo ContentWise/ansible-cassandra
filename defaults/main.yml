@@ -11,10 +11,11 @@ cassandra_rpc_address: localhost
 cassandra_rpc_port: 9160
 cassandra_seeds:
   - localhost
+cassandra_endpoint_snitch: SimpleSnitch
 
 cassandra_install_jmx_prometheus_javaagent: true # https://github.com/prometheus/jmx_exporter
 cassandra_jmx_prometheus_javaagent_version: '0.2.0'
-cassandra_jmx_prometheus_javaagent_port: 7070
+cassandra_jmx_prometheus_javaagent_port: 9404
 cassandra_jmx_prometheus_javaagent_config: # https://github.com/prometheus/jmx_exporter/blob/master/example_configs/cassandra.yml
   lowercaseOutputLabelNames: true
   lowercaseOutputName: true
