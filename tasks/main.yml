@@ -25,7 +25,6 @@
     creates: "{{ cassandra_install_dir }}"
     owner: "{{ cassandra_user }}"
     group: "{{ cassandra_group }}"
-  notify: restart cassandra
 
 - name: create symlink to the current release
   file:
@@ -34,7 +33,6 @@
     state: link
     owner: "{{ cassandra_user }}"
     group: "{{ cassandra_group }}"
-  notify: restart cassandra
 
 - name: Add bin dir to $PATH.
   copy:
@@ -52,6 +50,7 @@
     - commitlog
     - saved_caches
     - hints
+    - cdc_raw
   loop_control:
     label: "{{ cassandra_data_dir }}/{{ item }}"
 
@@ -68,10 +67,10 @@
     dest: "{{ cassandra_install_dir }}/conf/{{ item }}"
     owner: "{{ cassandra_user }}"
     group: "{{ cassandra_group }}"
-  notify: restart cassandra
   with_items:
     - cassandra.yaml
     - cassandra-env.sh
+    - logback.xml
 
 - block:
     - name: download jmx prometheus java agent
@@ -90,12 +89,10 @@
   template:
     src: cassandra.service.j2
     dest: /etc/systemd/system/cassandra.service
-  notify: restart cassandra
-
-- meta: flush_handlers
 
 - name: make sure Cassandra is started
   service:
     name: cassandra
-    state: started
     enabled: yes
+    state: started
+
