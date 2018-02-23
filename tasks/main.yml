@@ -71,6 +71,7 @@
     - cassandra.yaml
     - cassandra-env.sh
     - logback.xml
+  notify: sequentially restart Cassandra
 
 - block:
     - name: download jmx prometheus java agent
@@ -90,9 +91,15 @@
     src: cassandra.service.j2
     dest: /etc/systemd/system/cassandra.service
 
-- name: make sure Cassandra is started
+- name: make sure Cassandra is enabled
   service:
     name: cassandra
     enabled: yes
+
+- meta: flush_handlers
+
+- name: make sure Cassandra is started
+  service:
+    name: cassandra
     state: started
 
