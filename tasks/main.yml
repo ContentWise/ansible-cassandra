@@ -71,7 +71,7 @@
     - cassandra.yaml
     - cassandra-env.sh
     - logback.xml
-  notify: sequentially restart Cassandra
+  notify: sequentially restart cassandra
 
 - block:
     - name: download jmx prometheus java agent
@@ -97,6 +97,11 @@
     enabled: yes
 
 - meta: flush_handlers
+
+- name: trigger forced cassanra restart
+  command: echo "triggering cassandra restart"
+  notify: sequentially restart cassandra
+  when: cassandra_force_restart | bool
 
 - name: make sure Cassandra is started
   service:

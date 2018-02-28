@@ -1,7 +1,8 @@
 ---
-- name: sequentially restart Cassandra
+- name: sequentially restart Cassandra with {{ cassandra_sleep_between_restarts }}s sleep between restarts
   # `serial: 1` would be the proper solution here, but that can only be set on play level (upstream issue: https://github.com/ansible/ansible/issues/12170)
   run_once: true
   with_items: "{{ play_hosts }}"
   delegate_to: "{{ item }}"
   shell: systemctl restart cassandra && sleep {{ cassandra_sleep_between_restarts }}
+  listen: sequentially restart cassandra
