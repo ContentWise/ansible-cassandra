@@ -1,18 +1,4 @@
 ---
-- name: install libjemalloc1
-  package:
-    name: libjemalloc1
-  when: ansible_os_family == 'Debian'
-
-- name: set map counts param to 1048575
-  sysctl:
-    name: vm.max_map_count
-    value: 1048575
-
-- name: disable swap
-  command: swapoff --all
-  changed_when: no
-
 - name: make sure user for Cassandra exists
   user:
     name: "{{ cassandra_user }}"
@@ -71,7 +57,6 @@
     - cassandra.yaml
     - cassandra-env.sh
     - logback.xml
-  notify: sequentially restart cassandra
 
 - block:
     - name: download jmx prometheus java agent
@@ -91,20 +76,8 @@
     src: cassandra.service.j2
     dest: /etc/systemd/system/cassandra.service
 
-- name: make sure Cassandra is enabled
-  service:
-    name: cassandra
-    enabled: yes
-
-- meta: flush_handlers
-
-- name: trigger forced cassanra restart
-  command: echo "triggering cassandra restart"
-  notify: sequentially restart cassandra
-  when: cassandra_force_restart | bool
-
 - name: make sure Cassandra is started
   service:
     name: cassandra
     state: started
-
+    enabled: yes
