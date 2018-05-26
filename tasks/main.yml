@@ -6,17 +6,9 @@
 - name: unarchive Cassandra
   unarchive:
     remote_src: yes
-    dest: "{{ cassandra_install_parent_dir }}"
+    dest: "{{ cassandra_install_dir | dirname }}"
     src: "{{ cassandra_url }}"
-    creates: "{{ cassandra_install_dir }}"
-    owner: "{{ cassandra_user }}"
-    group: "{{ cassandra_group }}"
-
-- name: create symlink to the current release
-  file:
-    src: "{{ cassandra_install_dir }}"
-    path: "{{ cassandra_link_dir }}"
-    state: link
+    creates: "{{ cassandra_install_dir }}/bin/cassandra"
     owner: "{{ cassandra_user }}"
     group: "{{ cassandra_group }}"
 

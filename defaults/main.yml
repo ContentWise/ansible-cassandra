@@ -1,6 +1,8 @@
 ---
-cassandra_install_parent_dir: "/opt"
 cassandra_version: "3.11.2"
+cassandra_name: apache-cassandra-{{ cassandra_version }}
+cassandra_url: "http://archive.apache.org/dist/cassandra/{{ cassandra_version }}/{{ cassandra_name }}-bin.tar.gz"
+cassandra_install_dir: "/opt/{{ cassandra_name }}"
 cassandra_user: cassandra
 cassandra_group: cassandra
 cassandra_cluster_name: Test Cluster
@@ -12,8 +14,8 @@ cassandra_rpc_port: 9160
 cassandra_seeds:
   - localhost
 cassandra_endpoint_snitch: SimpleSnitch
-cassandra_data_dir: /var/lib/cassandra
-cassandra_log_dir: /var/log/cassandra
+cassandra_data_dir: /opt/cassandra/data
+cassandra_log_dir: /opt/cassandra/log
 
 cassandra_install_jmx_prometheus_javaagent: true # https://github.com/prometheus/jmx_exporter
 cassandra_jmx_prometheus_javaagent_version: '0.2.0'

@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
  
 @test "Validate status code for cassandra transport port" {
-  run sleep 10 && /opt/cassandra/bin/nodetool status
+  run systemctl status cassandra
   [ "$status" -eq 0 ]
 }
 

@@ -1,6 +1,0 @@
----
-cassandra_name: apache-cassandra-{{ cassandra_version }}
-cassandra_url: "http://archive.apache.org/dist/cassandra/{{ cassandra_version }}/{{ cassandra_name }}-bin.tar.gz"
-cassandra_install_dir: "{{ cassandra_install_parent_dir }}/{{ cassandra_name }}"
-cassandra_link_dir: "{{ cassandra_install_parent_dir }}/cassandra"
-cassandra_home_dir: "{{ cassandra_link_dir }}"
